@@ -94,7 +94,7 @@ public abstract class AbstractConsumerThread<K, V> extends Thread {
     
     protected void resumeConsumer() {
         try {
-            LOG.info("resumeConsumer topic-partition is {}", Arrays.toString(assignedPartitions));
+            LOG.info("resume paused Consumer topic-partition is {}", Arrays.toString(assignedPartitions));
             consumer.resume(assignedPartitions);
         } catch (Exception e) {
             LOG.warn("consumer.resume() fail due to ", e);
@@ -196,9 +196,12 @@ public abstract class AbstractConsumerThread<K, V> extends Thread {
     
     
     private void submitRecord(final ConsumerRecords<K, V> records) {
-        if (assignedPartitions != null && assignedPartitions[0].partition() == 7) {
+        
+        // only for test use
+        // if (assignedPartitions != null && assignedPartitions[0].partition() == 7) {
+        if(LOG.isTraceEnabled()) { // 调试模式下，打印消息的首尾offset
             int count = records.count();
-            LOG.info("handlePollData got {} records.", count);
+            LOG.info("submitRecord got {} records.", count);
             int i = 0;
             for (ConsumerRecord<K, V> record : records) {
                 if (i == 0 || i == count - 1) {
@@ -208,6 +211,7 @@ public abstract class AbstractConsumerThread<K, V> extends Thread {
                 i++;
             }
         }
+        
         if (!records.isEmpty()) {
             Runnable task = new Runnable() {
                 @Override
@@ -220,13 +224,13 @@ public abstract class AbstractConsumerThread<K, V> extends Thread {
             try {
                 future.get(sessionTimeoutMs, TimeUnit.MILLISECONDS);
                 future = null;
-            } catch (InterruptedException e1) {
-                LOG.info("", e1);
+            } catch (InterruptedException e) {
+                LOG.info("", e);
                 future = null;
-            } catch (ExecutionException e1) {
-                LOG.info("", e1);
+            } catch (ExecutionException e) {
+                LOG.info("", e);
                 future = null;
-            } catch (TimeoutException e1) {
+            } catch (TimeoutException e) {
                 // LOG.info("", e1);
                 // 超时，启动pause
                 LOG.info("pauseConsumer after execute consumerDataHandler {} ms.", sessionTimeoutMs);

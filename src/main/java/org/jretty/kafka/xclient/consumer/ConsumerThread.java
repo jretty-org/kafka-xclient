@@ -25,7 +25,7 @@ public class ConsumerThread<K, V> extends AbstractConsumerThread<K, V> {
         Integer count = null;
         if (LOG.isDebugEnabled()) {
             count = records.count();
-            LOG.debug("handlePollData got {} records.", count);
+            LOG.debug("handleConsumerRecords got {} records.", count);
         }
         
         offsetLogger.logOffset(records);
