@@ -13,6 +13,7 @@ The 'Best practice' of kafka consumer and producer.
 1. 支持 offset 的记录和检查，项目启动时 topic 可以自动 seek 到 上一次的 offset。
 1. 全面的关键日志、统计输出，让你对消费情况了如指掌。 
 1. 支持消费超时之前自动 pause 避免 re-blance;
-1. 基于长期生产实践保证数据不重复、不丢失。
+1. 基于长期生产实践保证数据不重复、不丢失。  
+（we use it for stream computing like Apache Storm at 2016)   
 
-该项目距今已经很久，部分功能可能已经过时，作者推荐使用<a href="https://github.com/spring-projects/spring-kafka" target="_blanck">spring-projects/spring-kafka</a>替代，大部分kafka的坑，spring-kafka都会为你填平。
+**该项目距今已经很久（since 2016， kafka 0.8，from bigdata push platform of IoT），部分功能可能已经过时**，作者推荐使用<a href="https://github.com/spring-projects/spring-kafka" target="_blanck">spring-projects/spring-kafka</a>替代，很多hack功能如出一辙，大部分kafka的坑，这个工具都会为你填平！
